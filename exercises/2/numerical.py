@@ -75,6 +75,6 @@ def _fortranfloat(value, passfunc, failfunc):
                     parts = valueasstring.split(sn, 1)
                     if istraditionalfloat(parts[0]) and \
                        istraditionalfloat(parts[1]) and \
-                       '.' in parts[0]:
+                       '.' in parts[0] and '.' not in parts[1]:
                         return passfunc(sign, sn, parts)
     return failfunc()
