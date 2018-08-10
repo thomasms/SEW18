@@ -28,6 +28,8 @@ class NumericalUnitTest(unittest.TestCase):
         self.assertEqual(isfloat("-3.83922-308"), True)
         self.assertEqual(isfloat("-4.10537-305"), True)
         self.assertEqual(isfloat("1.0+9"), True)
+        self.assertEqual(isfloat("1.0+1.0"), False)
+        self.assertEqual(isfloat("1+1.0"), False)
         self.assertEqual(isfloat("1+1"), False)
         self.assertEqual(isfloat("1-1"), False)
         self.assertEqual(isfloat("2.65773-+317"), False)
@@ -79,4 +81,6 @@ class NumericalUnitTest(unittest.TestCase):
         self.assertEqual(getfloat("+1e1"), 10)
         self.assertEqual(getfloat("-1e1"), -10)
         self.assertEqual(getfloat("-1.1e1"), -11)
+        self.assertEqual(getfloat("+"), "nan")
+        self.assertEqual(getfloat("-"), "nan")
 

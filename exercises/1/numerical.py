@@ -4,13 +4,13 @@ def getfloat(value):
         Will allow for fortran style floats, i.e -2.34321-308
         If it is neither then it will return "nan"
     """
-    if istradiationalfloat(value):
+    if istraditionalfloat(value):
         return float(value)
 
     return getfortranfloat(value)
 
 
-def istradiationalfloat(value):
+def istraditionalfloat(value):
     """
         Checks if the string can be converted to a floating point value
         Does not allow for fortran style floats, i.e -2.34321-308
@@ -29,7 +29,7 @@ def isfloat(value):
         If it is neither then it will return False
     """
     if isinstance(value, (int, float, str)):
-        return istradiationalfloat(value) or isfortranfloat(value)
+        return istraditionalfloat(value) or isfortranfloat(value)
     return False
 
 def isfortranfloat(value):
@@ -73,8 +73,8 @@ def _fortranfloat(value, passfunc, failfunc):
             for sn in signs:
                 if sn in valueasstring:
                     parts = valueasstring.split(sn, 1)
-                    if istradiationalfloat(parts[0]) and \
-                       istradiationalfloat(parts[1]) and \
+                    if istraditionalfloat(parts[0]) and \
+                       istraditionalfloat(parts[1]) and \
                        '.' in parts[0]:
                         return passfunc(sign, sn, parts)
     return failfunc()
