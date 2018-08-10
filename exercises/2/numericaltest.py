@@ -55,6 +55,7 @@ class NumericalUnitTest(unittest.TestCase):
         self.assertEqual(isfloat("0-0"), False)
         self.assertEqual(isfloat("0.0-0"), True)
         self.assertEqual(isfloat("(1)"), False)
+        self.assertEqual(isfloat(None), False)
 
     def test_getfloat(self):
         self.assertEqual(getfloat("1234567"), 1234567)
