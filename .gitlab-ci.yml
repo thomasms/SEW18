@@ -1,12 +1,31 @@
 variables:
   GET_SOURCES_ATTEMPTS: 3
 
+stages:
+  - test
 
-mybuild:
-    image: fispact/ubuntu:18.04_gfortran_7
+.my_template: &MY_TEMPLATE
+    stage: test
     before_script:
     - pip3 install pytest-cov
     script:
     - pytest --cov=numerical numericaltest.py
     tags:
     - docker
+
+
+ubuntu16.04-gfortran-5:
+    <<: *MY_TEMPLATE
+    image: fispact/ubuntu:16.04_gfortran_5
+
+opensuse42.3-gfortran-7:
+    <<: *MY_TEMPLATE
+    image: fispact/opensuse:42.3_gfortran_7
+
+centos7.4-gfortran-6:
+    <<: *MY_TEMPLATE
+    image: fispact/centos:7.4_gfortran_6
+
+alpine3.6-gfortran-6:
+    <<: *MY_TEMPLATE
+    image: fispact/alpine:3.6_gfortran_6
