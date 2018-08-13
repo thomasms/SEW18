@@ -3,20 +3,34 @@ variables:
 
 stages:
   - test
+  - fulltest
+
+before_script:
+  - pip3 install --upgrade pip setuptools
+  - pip3 install pytest-cov
+  - export PYTHONPATH=$PWD
+
+.base_test: &BASE_TEST |
+  python3 setup.py test
+  pip3 install .
 
 .my_template: &MY_TEMPLATE
     stage: test
-    before_script:
-    - pip3 install --upgrade pip setuptools
-    - pip3 install pytest-cov
-    - export PYTHONPATH=$PWD
     script:
-    - python3 setup.py test
-    - pip3 install .
+    - *BASE_TEST
+    tags:
+    - docker
+
+.regtests: &REGTESTS_TEMPLATE
+    stage: fulltest
+    script:
+    - *BASE_TEST
+    - bash runregtests.sh
     tags:
     - docker
 
 
+# base test suite
 ubuntu16.04-gfortran-5:
     <<: *MY_TEMPLATE
     image: fispact/ubuntu:16.04_gfortran_5
@@ -31,4 +45,21 @@ centos7.4-gfortran-6:
 
 alpine3.6-gfortran-6:
     <<: *MY_TEMPLATE
+    image: fispact/alpine:3.6_gfortran_6
+
+# run the full test suite on the same images
+full-ubuntu16.04-gfortran-5:
+    <<: *REGTESTS_TEMPLATE
+    image: fispact/ubuntu:16.04_gfortran_5
+
+full-opensuse42.3-gfortran-7:
+    <<: *REGTESTS_TEMPLATE
+    image: fispact/opensuse:42.3_gfortran_7
+
+full-centos7.4-gfortran-6:
+    <<: *REGTESTS_TEMPLATE
+    image: fispact/centos:7.4_gfortran_6
+
+full-alpine3.6-gfortran-6:
+    <<: *REGTESTS_TEMPLATE
     image: fispact/alpine:3.6_gfortran_6
