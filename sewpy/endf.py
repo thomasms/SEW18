@@ -1,5 +1,7 @@
-from sewpy.numerical import getfloat
+import math
+from textwrap import wrap
 
+from sewpy.numerical import getfloat
 
 LINE_LENGTH         = 80
 DATA_ENTRY_LENGTH   = 11
@@ -86,7 +88,7 @@ class ENDFTextRecord(ENDFRecord):
                                                                   self.text)
 
     def readLine(self, line):
-        pass
+        self.text = line[:DATA_LENGTH]
 
 
 class ENDFContRecord(ENDFRecord):
@@ -112,7 +114,15 @@ class ENDFContRecord(ENDFRecord):
         self.N2 = 0
     
     def readLine(self, line):
-        pass
+        # split the data into 6 columns of entries
+        d = wrap(line[:DATA_LENGTH], DATA_ENTRY_LENGTH)
+        assert len(d) == 6
+        self.C1 = getfloat(d[0])
+        self.C2 = getfloat(d[1])
+        self.L1 = int(getfloat(d[2]))
+        self.L2 = int(getfloat(d[3]))
+        self.N1 = int(getfloat(d[4]))
+        self.N2 = int(getfloat(d[5]))
 
 
 class ENDFHeadRecord(ENDFRecord):
@@ -138,7 +148,15 @@ class ENDFHeadRecord(ENDFRecord):
         self.N2 = 0.0
     
     def readLine(self, line):
-        pass
+        # split the data into 6 columns of entries
+        d = wrap(line[:DATA_LENGTH], DATA_ENTRY_LENGTH)
+        assert len(d) == 6
+        self.ZA = getfloat(d[0])
+        self.AWR = getfloat(d[1])
+        self.L1 = int(getfloat(d[2]))
+        self.L2 = int(getfloat(d[3]))
+        self.N1 = int(getfloat(d[4]))
+        self.N2 = int(getfloat(d[5]))
 
 
 class ENDFListRecord(object):
@@ -176,5 +194,12 @@ class ENDFListRecord(object):
             
             must have the same MAT, MF, MT numbers
         """
-        pass
+        assert len(lines) > 0
+        self.listcont.read(lines[0])
+        
+        nlines = math.ceil(self.listcont.N1/DATA_NENTRY)
+        assert len(lines) > nlines
+        for i in range(1, nlines+1):
+            for d in wrap(lines[i][:DATA_LENGTH], DATA_ENTRY_LENGTH):
+                self.entries.append(getfloat(d))
 
