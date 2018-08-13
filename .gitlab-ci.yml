@@ -7,6 +7,7 @@ stages:
 .my_template: &MY_TEMPLATE
     stage: test
     before_script:
+    - pip3 install --upgrade pip setuptools
     - pip3 install pytest-cov
     - export PYTHONPATH=$PWD
     script:
