@@ -5,6 +5,6 @@ variables:
 mybuild:
     image: fispact/ubuntu:18.04_gfortran_7
     script:
-    - echo "Running an empty CI"
+    - pytest numericaltest.py
     tags:
     - docker
