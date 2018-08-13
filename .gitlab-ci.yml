@@ -4,7 +4,9 @@ variables:
 
 mybuild:
     image: fispact/ubuntu:18.04_gfortran_7
+    before_script:
+    - pip3 install pytest-cov
     script:
-    - pytest numericaltest.py
+    - pytest --cov=numerical numericaltest.py
     tags:
     - docker
