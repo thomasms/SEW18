@@ -1,0 +1,10 @@
+variables:
+  GET_SOURCES_ATTEMPTS: 3
+
+
+mybuild:
+    image: fispact/ubuntu:18.04_gfortran_7
+    script:
+    - echo "Running an empty CI"
+    tags:
+    - docker
